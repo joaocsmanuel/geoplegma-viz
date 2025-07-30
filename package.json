@@ -1,0 +1,23 @@
+{
+  "name": "geoplegma-viz",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "@types/earcut": "^3.0.0",
+    "typescript": "~5.8.3",
+    "vite": "^7.0.4"
+  },
+  "dependencies": {
+    "canvas-orbit-camera": "^1.0.2",
+    "earcut": "^3.0.2",
+    "gl-matrix": "^3.4.3",
+    "h3-js": "^4.2.1",
+    "regl": "^2.1.1"
+  }
+}
