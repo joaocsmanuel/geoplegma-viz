@@ -39,6 +39,7 @@ const projected = latlonPoly.map(([lat, lon]) => {
   
   return projection.forward(lat, lon);
 });
+console.log(projected)
 
 const flatXY = projected.map(([x, y]) => [x, y]).flat();
 // Flatten to Float32Array
@@ -49,16 +50,17 @@ for (let i = 0; i < tris.length; i += 3) {
   indices.push([tris[i], tris[i + 1], tris[i + 2]]);
 }
 
-function animate() {
+// function animate() {
   renderer.render([
     {
       vertices: projected,
       indices,
-      color: [0.8, 0.1, 0.1, 1.0],
+      color: [0.2, 0.8, 0.9, 1.0],
+      height: 0.02,
     },
   ]);// updates camera & draws
-  requestAnimationFrame(animate);
-}
+  // requestAnimationFrame(animate);
+// }
 
-animate(); 
+// animate(); 
 // setupCounter(document.querySelector<HTMLButtonElement>('#counter')!)
