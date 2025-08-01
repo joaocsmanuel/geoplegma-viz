@@ -1,4 +1,4 @@
-import { DGGRS_ID } from "../../layers/dggs-layer";
+import { DGGRS_CONTEXT, DGGRS_ID } from "../../layers/dggs-layer";
 import { ElementNotFoundError, ValidationError } from "./error";
 
 // ============================================================================
@@ -64,18 +64,20 @@ export class Validator {
             }
           );
         }
-        // if (
-        //   typeof layer.opacity !== "number" ||
-        //   layer.opacity < 0 ||
-        //   layer.opacity > 1
-        // ) {
-        //   throw new ValidationError(
-        //     "Layer opacity must be a number between 0 and 1",
-        //     {
-        //       received: layer.opacity,
-        //     }
-        //   );
-        // }
+
+        if (
+          typeof dggrs.context !== "string" ||
+          !DGGRS_CONTEXT.includes(dggrs.context)
+        ) {
+          throw new ValidationError(
+            `Invalid context: ${
+              dggrs.context
+            }. Valid options: ${DGGRS_CONTEXT.join(", ")}`,
+            {
+              received: typeof dggrs.context,
+            }
+          );
+        } 
       }
     }
 

@@ -21,6 +21,7 @@ export const DGGRS_ID = [
   "H3O-H3",
 ];
 
+export const DGGRS_CONTEXT = ["zones", "bbox", "parent"];
 
 export interface DGGSLayerProps {
   id?: DggrsId;

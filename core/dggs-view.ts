@@ -41,25 +41,30 @@ export class DGGSView {
       console.log(this.props);
       // ========== Validate props ==========
       this._validateConfiguration();
+     
       // let polygons = this._validateDggrs();
 
       // console.log(this.props);
-      // // ========== Renderer and camera ==========
-      // let canvas = this._createCanvas();
-      // const renderer = createRenderer(canvas);
+      // ========== Renderer and camera ==========
+      let canvas = this._createCanvas();
+      const renderer = createRenderer(canvas);
 
-      // // ========== Projection ==========
-      // const projection = Projections[this.props.projection];
-
-      // const renderOptions = polygons.map((polygon) => {
-      //   const { vertices, indices } = this._project(projection, polygon);
-      //   return {
-      //     vertices,
-      //     indices,
-      //     color: [0.2, 0.8, 0.9, 1.0],
-      //     height: 0.02,
-      //   };
-      // });
+      // ========== Projection ==========
+      const projection = Projections[this.props.projection];
+ const h3 = new H3Adapter(this.props.dggrs.context, {
+   zones: this.props.dggrs.zones,
+   bbox: this.props.dggrs.bbox,
+   parent: this.props.dggrs.parent,
+ });
+      const renderOptions = h3.polygons.map((polygon) => {
+        const { vertices, indices } = this._project(projection, polygon);
+        return {
+          vertices,
+          indices,
+          color: [0.2, 0.8, 0.9, 1.0],
+          height: 0.02,
+        };
+      });
 
       // renderer.render(renderOptions); // updates camera & draws
     } catch (error) {
@@ -118,7 +123,6 @@ export class DGGSView {
   }
 
   _validateContext() {
-    if (this.props.dggrs) {
       const dggrs = this.props.dggrs;
       if (dggrs.context === "zones") {
         if (dggrs.zones && dggrs.zones.length > 0) {
@@ -127,10 +131,10 @@ export class DGGSView {
         }
       } else if (dggrs.context === "bbox") {
         if (dggrs.bbox && dggrs.bbox.length > 0 && dggrs.resolution) {
+
         }
       } else if (dggrs.context === "parent") {
       }
-    }
   }
 }
 

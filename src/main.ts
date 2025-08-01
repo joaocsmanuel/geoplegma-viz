@@ -69,7 +69,7 @@ new DGGSView({
   dggrs: {
     id: "H3O-H3", // or 'healpix', 'dggal', etc.
     //   resolution: 5,
-    // context: "zones", // zones, bbox, parent
+    context: "zones", // zones, bbox, parent
     zones: [
       "812afffffffffff",
       "813bbffffffffff",
