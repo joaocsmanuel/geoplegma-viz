@@ -20,10 +20,10 @@
 //     </p>
 //   </div>
 // `
-import { createRenderer } from "../core/renderer/renderCells";
-import { Projections } from "../core/projections";
-import { cellToBoundary } from "h3-js";
-import earcut from "earcut"; // install via npm
+// import { createRenderer } from "../core/renderer/renderCells";
+// import { Projections } from "../core/projections";
+// import { cellToBoundary } from "h3-js";
+// import earcut from "earcut"; // install via npm
 
 // const canvas = document.querySelector("#my-canvas");
 // console.log(canvas)
@@ -65,4 +65,63 @@ import earcut from "earcut"; // install via npm
 // // animate();
 // // setupCounter(document.querySelector<HTMLButtonElement>('#counter')!)
 import DGGSView from "../core/dggs-view";
-new DGGSView();
+new DGGSView({
+  layer: {
+    dggrs: "H3O-H3", // or 'healpix', 'dggal', etc.
+    //   resolution: 5,
+    zones: [
+      "812afffffffffff",
+      "813bbffffffffff",
+      "812a7ffffffffff",
+      "814dbffffffffff",
+      "813a3ffffffffff",
+      "813abffffffffff",
+      "814d3ffffffffff",
+      "814d7ffffffffff",
+      "814c3ffffffffff",
+      "815efffffffffff",
+      "813afffffffffff",
+      "813a7ffffffffff",
+      "813b7ffffffffff",
+      "813b3ffffffffff",
+      "812b7ffffffffff",
+      "812a3ffffffffff",
+      "811abffffffffff",
+      "812b3ffffffffff",
+      "81277ffffffffff",
+      "812abffffffffff",
+      "812bbffffffffff",
+      "8144fffffffffff",
+      "81267ffffffffff",
+
+      "812afffffffffff",
+      "813bbffffffffff",
+      "812a7ffffffffff",
+      "814dbffffffffff",
+      "813a3ffffffffff",
+      "813abffffffffff",
+      "814d3ffffffffff",
+      "814d7ffffffffff",
+      "814c3ffffffffff",
+      "815efffffffffff",
+      "813afffffffffff",
+      "813a7ffffffffff",
+      "813b7ffffffffff",
+      "813b3ffffffffff",
+      "812b7ffffffffff",
+      "812a3ffffffffff",
+      "811abffffffffff",
+      "812b3ffffffffff",
+      "81277ffffffffff",
+      "812abffffffffff",
+      "812bbffffffffff",
+      "8144fffffffffff",
+      "81267ffffffffff",
+    ], // Unique cell IDs
+    //   getColor: (index) => [255, 100, 100],
+    //   getElevation: (index) => 50,
+    //   projection: "globe", // 'mercator', 'equal-area', etc.
+    //   wireframe: boolean,
+    //   opacity: number,
+  },
+});

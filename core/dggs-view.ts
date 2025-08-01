@@ -2,37 +2,46 @@ import { DGGSLayer } from "../layers/dggs-layer";
 import { createRenderer } from "./renderer/renderCells";
 
 import { Projections } from "./projections";
-import { cellToBoundary } from "h3-js";
+import H3Adapter from "./grid-systems/h3";
 import earcut from "earcut";
+type DggsViewProps = {
+  /// HTML element string id.
+  element?: string;
+  zones?: string[];
+  layer?: DGGSLayer;
+  projection: "globe";
+};
 
 export class DGGSView {
-  props: {
-    /// HTML element string id.
-    element?: string;
-    layer?: string;
-    projection: "globe";
-  };
-  constructor() {
-    let props = (this.props = {
+  props: DggsViewProps;
+
+  constructor(props?: Partial<DggsViewProps>) {
+    this.props = {
       element: "dggs",
       layer: undefined,
       projection: "globe",
-    });
-
+      zones: [],
+      ...props,
+    };
+    console.log(this.props);
     let canvas = this._createCanvas();
     const renderer = createRenderer(canvas);
 
-    const projection = Projections[props.projection];
-    const { vertices, indices } = this._project(projection);
+    const projection = Projections[this.props.projection];
 
-    renderer.render([
-      {
+    const polygons = new H3Adapter(this.props.layer.zones);
+
+    const renderOptions = polygons.map((polygon) => {
+      const { vertices, indices } = this._project(projection, polygon);
+      return {
         vertices,
         indices,
         color: [0.2, 0.8, 0.9, 1.0],
         height: 0.02,
-      },
-    ]); // updates camera & draws
+      };
+    });
+
+    renderer.render(renderOptions); // updates camera & draws
   }
 
   _createCanvas() {
@@ -49,14 +58,11 @@ export class DGGSView {
     return canvas;
   }
 
-  _project(projection) {
-    const cell = "80a5fffffffffff";
-    const latlonPoly = cellToBoundary(cell, true);
+  _project(projection, latlon) {
     // Project to 3D (or flatten to 2D for now)
-    const projected = latlonPoly.map(([lat, lon]) => {
+    const projected = latlon.map(([lat, lon]) => {
       return projection.forward(lat, lon);
     });
-    console.log(projected);
 
     const flatXY = projected.map(([x, y]) => [x, y]).flat();
     // Flatten to Float32Array

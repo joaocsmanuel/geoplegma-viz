@@ -59,15 +59,14 @@ export function createRenderer(canvas: HTMLCanvasElement) {
   return {
     render(cells) {
       regl.frame(() => {
-        console.log(cells);
         const aspect = canvas.width / canvas.height;
         mat4.perspective(projMat, Math.PI / 4, aspect, 0.01, 100);
 
         regl.clear({ color: [0.2, 0.8, 0.9, 1], depth: 1 });
         camera.tick(); // update camera from user input
 
-        time += 0.016;
-        const dynamicHeight = 0.05 + 0.02 * Math.sin(time * 2);
+        // time += 0.016;
+        // const dynamicHeight = 0.05 + 0.02 * Math.sin(time * 2);
         for (const cell of cells) {
           // const positionBuffer = regl.buffer(cell.vertices); // [[x, y], ...]
           // const indexBuffer = regl.elements(cell.indices); // [[i1, i2, i3], ...]

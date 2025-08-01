@@ -10,34 +10,29 @@ export type DggrsId =
   | "H3O-H3";
 
 interface DGGSLayerProps {
-  dggrs: DggrsId;
-  resolution: number;
-  indexes: number[];
-  getColor: (d: any) => number[];
-  getElevation: (d: any) => number;
-  projection: "globe";
-  wireframe: boolean;
-  opacity: number;
+  dggrs?: DggrsId;
+  resolution?: number;
+  indexes?: number[];
+  getColor?: (d: any) => number[];
+  getElevation?: (d: any) => number;
+  projection?: "globe";
+  wireframe?: boolean;
+  opacity?: number;
 }
 
-export class DGGSLayer implements DGGSLayerProps {
+export class DGGSLayer {
+  props!: DGGSLayerProps;
   constructor() {
-    this.dggrs;
-    this.resolution = 0;
-    this.indexes = [];
-    this.getColor = (d: any) => [255, 100, 100];
-    this.getElevation = (d: any) => 50;
-    (this.projection = "globe"), (this.wireframe = false);
-    this.opacity = 1;
+    this.props;
+//     { 
+//         dggrs = un;
+//     this.resolution = 0;
+//     this.indexes = [];
+//     this.getColor = (d: any) => [255, 100, 100];
+//     this.getElevation = (d: any) => 50;
+//     (this.projection = "globe"), (this.wireframe = false);
+//     this.opacity = 1;
   }
-  dggrs: DggrsId;
-  resolution: number;
-  indexes: number[];
-  getColor: (d: any) => number[] | number[];
-  getElevation: (d: any) => number | number;
-  projection: "globe";
-  wireframe: boolean;
-  opacity: number;
 }
 
 // DGGSLayer({
