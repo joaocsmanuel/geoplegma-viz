@@ -9,29 +9,48 @@ export type DggrsId =
   | "DGGAL-RTEA9R"
   | "H3O-H3";
 
-interface DGGSLayerProps {
-  dggrs?: DggrsId;
+export const DGGRS_ID = [
+  "DGGRID-ISEA3H",
+  "DGGRID-IGEO7",
+  "DGGAL-ISEA3H",
+  "DGGAL-ISEA9R",
+  "DGGAL-IVEA3H",
+  "DGGAL-IVEA9R",
+  "DGGAL-RTEA3H",
+  "DGGAL-RTEA9R",
+  "H3O-H3",
+];
+
+
+export interface DGGSLayerProps {
+  id?: DggrsId;
+  context: "zones" | "bbox" | "parent";
   resolution?: number;
-  indexes?: number[];
-  getColor?: (d: any) => number[];
-  getElevation?: (d: any) => number;
-  projection?: "globe";
-  wireframe?: boolean;
-  opacity?: number;
+  zones?: string[];
+  // getColor?: (d: any) => number[];
+  // getElevation?: (d: any) => number;
+  // wireframe?: boolean;
+  // opacity?: number;
 }
 
 export class DGGSLayer {
-  props!: DGGSLayerProps;
+  id?: DggrsId;
+  context: "zones" | "bbox" | "parent" = "zones";
+  zones?: string[];
+  resolution?: number;
+  getColor?: (d: any) => number[];
+  getElevation?: (d: any) => number;
+  wireframe?: boolean;
+  opacity?: number;
   constructor() {
-    this.props;
-//     { 
-//         dggrs = un;
-//     this.resolution = 0;
-//     this.indexes = [];
-//     this.getColor = (d: any) => [255, 100, 100];
-//     this.getElevation = (d: any) => 50;
-//     (this.projection = "globe"), (this.wireframe = false);
-//     this.opacity = 1;
+    //     {
+    //         dggrs = un;
+    //     this.resolution = 0;
+    //     this.indexes = [];
+    //     this.getColor = (d: any) => [255, 100, 100];
+    //     this.getElevation = (d: any) => 50;
+    //     (this.projection = "globe"), (this.wireframe = false);
+    //     this.opacity = 1;
   }
 }
 

@@ -5,12 +5,10 @@ export class H3Adapter extends DGGSAdapter {
   constructor(zones: string[]) {
     super();
 
-    const cell = "80a5fffffffffff";
-
     const polygons = zones.map((zone) => {
       return cellToBoundary(zone, true);
     });
-console.log(polygons);
+
     return polygons;
   }
 }

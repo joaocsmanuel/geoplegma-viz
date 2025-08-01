@@ -66,9 +66,10 @@
 // // setupCounter(document.querySelector<HTMLButtonElement>('#counter')!)
 import DGGSView from "../core/dggs-view";
 new DGGSView({
-  layer: {
-    dggrs: "H3O-H3", // or 'healpix', 'dggal', etc.
+  dggrs: {
+    id: "H3O-H3", // or 'healpix', 'dggal', etc.
     //   resolution: 5,
+    // context: "zones", // zones, bbox, parent
     zones: [
       "812afffffffffff",
       "813bbffffffffff",

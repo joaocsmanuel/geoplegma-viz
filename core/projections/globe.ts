@@ -1,4 +1,7 @@
 // GlobeProjection.ts
+
+import type { Projection } from ".";
+
 // This maps (lat, lon) to a unit sphere, which you can scale for visual output.
 export const GlobeProjection: Projection = {
   id: "globe",

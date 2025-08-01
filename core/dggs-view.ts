@@ -1,48 +1,89 @@
-import { DGGSLayer } from "../layers/dggs-layer";
+import { DGGSLayer, type DGGSLayerProps } from "../layers/dggs-layer";
 import { createRenderer } from "./renderer/renderCells";
 
-import { Projections } from "./projections";
+import { Projections, type ProjectionId } from "./projections";
 import H3Adapter from "./grid-systems/h3";
 import earcut from "earcut";
-type DggsViewProps = {
+
+import { ErrorManager } from "./utils/error-handler";
+import { Validator } from "./utils/validator";
+interface DggsViewProps {
   /// HTML element string id.
   element?: string;
-  zones?: string[];
-  layer?: DGGSLayer;
-  projection: "globe";
+  // zones?: string[];
+  dggrs?: DGGSLayerProps;
+  projection: ProjectionId;
+}
+
+const DEFAULT_PROPS: DggsViewProps = {
+  element: "dggs",
+  projection: "globe",
+  dggrs: {
+    id: undefined,
+    context: "zones",
+    resolution: undefined,
+    zones: undefined,
+    // wireframe: "false",
+    // opacity: "number",
+  },
 };
 
 export class DGGSView {
   props: DggsViewProps;
 
   constructor(props?: Partial<DggsViewProps>) {
-    this.props = {
-      element: "dggs",
-      layer: undefined,
-      projection: "globe",
-      zones: [],
-      ...props,
-    };
-    console.log(this.props);
-    let canvas = this._createCanvas();
-    const renderer = createRenderer(canvas);
-
-    const projection = Projections[this.props.projection];
-
-    const polygons = new H3Adapter(this.props.layer.zones);
-
-    const renderOptions = polygons.map((polygon) => {
-      const { vertices, indices } = this._project(projection, polygon);
-      return {
-        vertices,
-        indices,
-        color: [0.2, 0.8, 0.9, 1.0],
-        height: 0.02,
+    try {
+      // const { dggrs, ...restProps } = props;
+      this.props = {
+        ...DEFAULT_PROPS,
+        ...props,
       };
-    });
+      console.log(this.props);
+      // ========== Validate props ==========
+      this._validateConfiguration();
+      // let polygons = this._validateDggrs();
 
-    renderer.render(renderOptions); // updates camera & draws
+      // console.log(this.props);
+      // // ========== Renderer and camera ==========
+      // let canvas = this._createCanvas();
+      // const renderer = createRenderer(canvas);
+
+      // // ========== Projection ==========
+      // const projection = Projections[this.props.projection];
+
+      // const renderOptions = polygons.map((polygon) => {
+      //   const { vertices, indices } = this._project(projection, polygon);
+      //   return {
+      //     vertices,
+      //     indices,
+      //     color: [0.2, 0.8, 0.9, 1.0],
+      //     height: 0.02,
+      //   };
+      // });
+
+      // renderer.render(renderOptions); // updates camera & draws
+    } catch (error) {
+      // ErrorManager.handleError(
+      //   error instanceof Error ? error : new Error(String(error))
+      // );
+      throw error;
+    }
   }
+
+  private _validateConfiguration(): void {
+    if (this.props.element) {
+      Validator.validateElement(this.props.element);
+    }
+
+    Validator.validateProjection(this.props.projection);
+
+    Validator.validateDggrs(this.props.dggrs);
+  }
+
+  // private _validateDggrsConfiguration() {
+
+  //   Validator.valida(this.props.dggrs);
+  // }
 
   _createCanvas() {
     let canvas;
@@ -74,6 +115,22 @@ export class DGGSView {
     }
 
     return { vertices: projected, indices };
+  }
+
+  _validateContext() {
+    if (this.props.dggrs) {
+      const dggrs = this.props.dggrs;
+      if (dggrs.context === "zones") {
+        if (dggrs.zones && dggrs.zones.length > 0) {
+          return new H3Adapter(dggrs.zones);
+        } else {
+        }
+      } else if (dggrs.context === "bbox") {
+        if (dggrs.bbox && dggrs.bbox.length > 0 && dggrs.resolution) {
+        }
+      } else if (dggrs.context === "parent") {
+      }
+    }
   }
 }
 
