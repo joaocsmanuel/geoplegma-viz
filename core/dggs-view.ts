@@ -33,30 +33,25 @@ export class DGGSView {
 
   constructor(props?: Partial<DggsViewProps>) {
     try {
-      // const { dggrs, ...restProps } = props;
       this.props = {
         ...DEFAULT_PROPS,
         ...props,
       };
-      console.log(this.props);
+
       // ========== Validate props ==========
       this._validateConfiguration();
-     
-      // let polygons = this._validateDggrs();
 
-      // console.log(this.props);
       // ========== Renderer and camera ==========
       let canvas = this._createCanvas();
       const renderer = createRenderer(canvas);
 
       // ========== Projection ==========
       const projection = Projections[this.props.projection];
- const h3 = new H3Adapter(this.props.dggrs.context, {
-   zones: this.props.dggrs.zones,
-   bbox: this.props.dggrs.bbox,
-   parent: this.props.dggrs.parent,
- });
-      const renderOptions = h3.polygons.map((polygon) => {
+
+      // ========== Grid ==========
+      const h3 = new H3Adapter();
+      const polygons = h3.getPolygons(this.props.dggrs);
+      const renderOptions = polygons.map((polygon) => {
         const { vertices, indices } = this._project(projection, polygon);
         return {
           vertices,
@@ -66,7 +61,7 @@ export class DGGSView {
         };
       });
 
-      // renderer.render(renderOptions); // updates camera & draws
+      renderer.render(renderOptions); // updates camera & draws
     } catch (error) {
       // ErrorManager.handleError(
       //   error instanceof Error ? error : new Error(String(error))
@@ -123,18 +118,17 @@ export class DGGSView {
   }
 
   _validateContext() {
-      const dggrs = this.props.dggrs;
-      if (dggrs.context === "zones") {
-        if (dggrs.zones && dggrs.zones.length > 0) {
-          return new H3Adapter(dggrs.zones);
-        } else {
-        }
-      } else if (dggrs.context === "bbox") {
-        if (dggrs.bbox && dggrs.bbox.length > 0 && dggrs.resolution) {
-
-        }
-      } else if (dggrs.context === "parent") {
+    const dggrs = this.props.dggrs;
+    if (dggrs.context === "zones") {
+      if (dggrs.zones && dggrs.zones.length > 0) {
+        return new H3Adapter(dggrs.zones);
+      } else {
       }
+    } else if (dggrs.context === "bbox") {
+      if (dggrs.bbox && dggrs.bbox.length > 0 && dggrs.resolution) {
+      }
+    } else if (dggrs.context === "parent") {
+    }
   }
 }
 

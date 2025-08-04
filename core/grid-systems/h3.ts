@@ -1,30 +1,67 @@
-import { cellToBoundary } from "h3-js";
+import {
+  cellToBoundary,
+  cellToChildren,
+  polygonToCells,
+  type CoordPair,
+} from "h3-js";
 import { DGGSAdapter } from "./dggs-adapter";
+import type { DGGSLayerProps } from "../../layers/dggs-layer";
+import { Validator } from "../utils/validator";
+import { ValidationError } from "../utils/error";
 
+// temporarly
 export class H3Adapter extends DGGSAdapter {
-  constructor(context, { zones, bbox, parent }) {
+  polygons: CoordPair[][];
+  constructor() {
     super();
     this.polygons = [];
+  }
 
-    const dggrs = this.props.dggrs;
-    if (dggrs.context === "zones") {
-      if (dggrs.zones && dggrs.zones.length > 0) {
-        this.polygons = zones.map((zone) => {
+  getPolygons(dggrs: DGGSLayerProps) {
+    try {
+      let polygons = [];
+      if (dggrs.context === "zones") {
+        const zones = Validator.validateZones(dggrs.zones);
+        polygons = zones.map((zone) => {
           return cellToBoundary(zone, true);
         });
-      } else {
+      } else if (dggrs.context === "bbox") {
+        // if (
+        //   dggrs.bbox &&
+        //   dggrs.bbox.length > 0 &&
+        //   (dggrs.resolution !== undefined || dggrs.resolution !== null)
+        // ) {
+        const bbox =  Validator.validateBbox(dggrs.bbox);
+        if (typeof dggrs.resolution === "number" && !isNaN(dggrs.resolution)) {
+          const zones = polygonToCells(bbox, dggrs.resolution);
+          polygons = zones.map((zone) => {
+            return cellToBoundary(zone, true);
+          });
+        } else {
+          throw new ValidationError("Resolution is empty.");
+        }
+
+        // }
+      } else if (dggrs.context === "parent") {
+        if (
+          dggrs.parentId &&
+          typeof dggrs.resolution === "number" &&
+          !isNaN(dggrs.resolution)
+        ) {
+          const zones = cellToChildren(dggrs.parentId, dggrs.resolution);
+          polygons = zones.map((zone) => {
+            return cellToBoundary(zone, true);
+          });
+        } else {
+          throw new ValidationError("Resolution or parentId is empty.");
+        }
       }
-    } else if (dggrs.context === "bbox") {
-      if (dggrs.bbox && dggrs.bbox.length > 0 && dggrs.resolution) {
-      }
-    } else if (dggrs.context === "parent") {
+
+      console.log(this);
+      return polygons;
+    } catch (error) {
+      throw error;
     }
-
-    const polygons = zones.map((zone) => {
-      return cellToBoundary(zone, true);
-    });
-
-    return polygons;
   }
 }
 

@@ -77,7 +77,7 @@ export class Validator {
               received: typeof dggrs.context,
             }
           );
-        } 
+        }
       }
     }
 
@@ -88,5 +88,53 @@ export class Validator {
     //     });
     //   }
     // }
+  }
+
+  static validateZones(zones: any): any {
+    if (zones === undefined) {
+      throw new ValidationError("Zones cannot be undefined");
+    }
+
+    if (zones === null) {
+      throw new ValidationError("Zones cannot be null");
+    }
+
+    if (zones) {
+      if (typeof zones !== "object") {
+        throw new ValidationError("Zones must be an array", {
+          received: typeof zones,
+        });
+      }
+
+      if (zones.length === 0) {
+        throw new ValidationError("Zones array is empty.");
+      }
+
+      return zones;
+    }
+  }
+
+  static  validateBbox(bbox: any): any{
+    if (bbox === undefined) {
+      throw new ValidationError("Bbox cannot be undefined");
+    }
+
+    if (bbox === null) {
+      throw new ValidationError("Bbox cannot be null");
+    }
+
+    if (bbox) {
+      if (typeof bbox !== "object") {
+        throw new ValidationError("Bbox must be an array", {
+          received: typeof bbox,
+        });
+      }
+
+      if (bbox.length === 0) {
+        throw new ValidationError("Bbox array is empty.");
+      }
+
+      return bbox;
+    }
   }
 }

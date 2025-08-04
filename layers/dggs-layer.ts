@@ -28,6 +28,8 @@ export interface DGGSLayerProps {
   context: "zones" | "bbox" | "parent";
   resolution?: number;
   zones?: string[];
+  bbox?: number[][];
+  parentId?: string;
   // getColor?: (d: any) => number[];
   // getElevation?: (d: any) => number;
   // wireframe?: boolean;
